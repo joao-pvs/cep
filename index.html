@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 8</title>
+    <link rel="stylesheet" href="assests/css/style.css">
+</head>
+<body>
+    <section class="consulta">
+   
+            <h1>Consulte seu CEP aqui</h1>
+            <input type="text" placeholder="Digite o CEP" id="cep">
+            <button onclick="buscarCEP()">Buscar</button>
+        
+    </section>
+
+    <div id="card-resultado">
+      
+    </div>
+
+    <script>
+        var dadosJson;
+        var cep;
+
+        async function buscarCEP(){
+            cep = document.querySelector('#cep').value;
+            console.log(cep)
+
+            await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(dados => {
+                dadosJson = dados;
+                console.log(dadosJson);
+            })
+
+            .catch(error => {
+                alert.error('Erro ao buscar o CEP:', error);
+            })
+
+            if(dadosJson){
+                document.querySelector('#card-resultado').innerHTML += `
+                <div class="card">
+                    <h2>CEP: ${dadosJson.cep}</h2>
+                    <p>Logradouro: ${dadosJson.logradouro}</p>
+                    <p>Complemento: ${dadosJson.complemento}</p>
+                    <p>Bairro: ${dadosJson.bairro}</p>
+                    <p>Cidade: ${dadosJson.localidade}</p>
+                    <p>Estado: ${dadosJson.uf}</p>
+                </div>`;
+            }else{
+                alert.log('Dados do CEP não disponíveis.');
+            }
+        }
+    </script>
+</body>
+</html>
